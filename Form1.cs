@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Timers;
-
+using System.IO;
 
 namespace bruhsplit
 {
@@ -19,6 +19,7 @@ namespace bruhsplit
         private Point dragPoint = new Point();
         private string status = "None";
         private double startTime = 0;
+        IDictionary<string, bool> options = new Dictionary<string, bool>();
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
@@ -30,12 +31,40 @@ namespace bruhsplit
             obj.MouseDown += new MouseEventHandler(Form1_MouseDown);
             obj.MouseMove += new MouseEventHandler(Form1_MouseMove);
         }
+        private async Task saveData() {
+            string saveStr = "";
+            foreach (var kvp in options) {
+                saveStr += kvp.Key + "=" + kvp.Value + ";";
+            };
+            await Task.Run(() => File.WriteAllText("options.txt", saveStr));
+        }
+        private async Task loadData() {
+            string text = "";
+            try {
+                await Task.Run(() => { text = File.ReadAllText("options.txt"); });
+            } catch (Exception) {
+                Console.WriteLine("No data found");
+            };
+            if (text == "") { return; };
+            string[] newData = text.Split(';'); // why does " and ' have a difference in c#
+            foreach (var data in newData) {
+                var dict = data.Split('=');
+                options[dict[0]] = dict[1] == "True";
+                foreach (ToolStripMenuItem test in optionsToolStripMenuItem.DropDownItems) {
+                    if (test.Name == dict[0] + "Context") {
+                        test.Checked = dict[1] == "True";
+                        break;
+                    };
+                };
+            };
+        }
 
         public Bruhsplit()
         {
             InitializeComponent();
             setUpMovement(this);
             //setUpMovement(TimerText);
+            Console.WriteLine("HELLO");
             TopMost = true;
             TimerText.AutoSize = true;
             TimerText.Text = "im pau";
@@ -46,13 +75,25 @@ namespace bruhsplit
             _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
 
             Load += new EventHandler(Form1_Load);
+
+            options.Add("LivesplitStyleFormatting", false);
+            Task.Run(async () => { await loadData(); });
         }
         private string formatTime(float time)
         {
-            int min = (int)Math.Floor(time / 60);
+            int min = (int)Math.Floor((time / 60)%60);
             int sec = (int)Math.Floor(time % 60);
             int ms = (int)Math.Floor((time % 1) * 100);
-            return String.Format("{0}:{1:D2}.{2:D2}", min,sec,ms);
+            int hour = (int)Math.Floor(time/(60*60));
+
+            if (options["LivesplitStyleFormatting"] && min == 0 && hour == 0) {
+                return String.Format("{0}.{1:D2}", sec, ms);
+            }
+            if (hour == 0) {
+                return String.Format("{0}:{1:D2}.{2:D2}", min, sec, ms);
+            } else {
+                return String.Format("{0}:{1:D2}:{2:D2}.{3:D2}", hour, min, sec, ms);
+            }
         }
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -101,7 +142,7 @@ namespace bruhsplit
             Invoke(new Action(() => {
                 TimerText.Location = new Point(Width - TimerText.Width-5, (100-85)/2);
                 if (status == "None") {
-                    TimerText.Text = "0:00.00";
+                    TimerText.Text = formatTime(0);
                     TimerText.ForeColor = Color.LightGray;
                 } else if (status == "Running") {
                     TimerText.Text = formatTime((float)(DateTimeOffset.Now.ToUnixTimeMilliseconds()-startTime)/1000);
@@ -116,6 +157,22 @@ namespace bruhsplit
             aTimer.Elapsed += UpdateFrame;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
+        }
+
+        private void optionHandler(ToolStripMenuItem sender) {
+            sender.Checked = !sender.Checked;
+            string[] seperate = { "Context" };
+            string[] words = sender.Name.Split(seperate, StringSplitOptions.RemoveEmptyEntries);
+            options[words[0]] = sender.Checked;
+            Task.Run(async () => { await saveData(); });
+        }
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e) {
+            Environment.Exit(0);
+        }
+
+        private void LivesplitStyleFormattingContext_Click(object sender, EventArgs e) {
+            optionHandler((ToolStripMenuItem)sender);
         }
     }
 }
