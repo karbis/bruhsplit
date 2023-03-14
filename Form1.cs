@@ -13,7 +13,7 @@ using System.Timers;
 
 namespace bruhsplit
 {
-    public partial class Form1 : Form
+    public partial class Bruhsplit : Form
     {
         private bool dragging = false;
         private Point dragPoint = new Point();
@@ -31,16 +31,12 @@ namespace bruhsplit
             obj.MouseMove += new MouseEventHandler(Form1_MouseMove);
         }
 
-        public Form1()
+        public Bruhsplit()
         {
             InitializeComponent();
             setUpMovement(this);
             //setUpMovement(TimerText);
             TopMost = true;
-            aTimer = new System.Timers.Timer(1000 / 60);
-            aTimer.Elapsed += UpdateFrame;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
             TimerText.AutoSize = true;
             TimerText.Text = "im pau";
             TimerText.Size = new Size(Width, Height);
@@ -48,6 +44,8 @@ namespace bruhsplit
 
             _globalKeyboardHook = new GlobalKeyboardHook();
             _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
+
+            Load += new EventHandler(Form1_Load);
         }
         private string formatTime(float time)
         {
@@ -112,6 +110,12 @@ namespace bruhsplit
                     TimerText.ForeColor = Color.Cyan;
                 }
             }));
+        }
+        private void Form1_Load(object sender, EventArgs e) {
+            aTimer = new System.Timers.Timer(1000 / 60);
+            aTimer.Elapsed += UpdateFrame;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
         }
     }
 }

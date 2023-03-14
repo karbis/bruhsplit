@@ -1,7 +1,7 @@
 ﻿
 namespace bruhsplit
 {
-    partial class Form1
+    partial class Bruhsplit
     {
         /// <summary>
         /// Required designer variable.
@@ -53,7 +53,7 @@ namespace bruhsplit
             this.TimerText.TabIndex = 1;
             this.TimerText.Text = "label1";
             // 
-            // Form1
+            // Bruhsplit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -62,7 +62,7 @@ namespace bruhsplit
             this.Controls.Add(this.TimerText);
             this.Controls.Add(this.DebugMsg);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Form1";
+            this.Name = "Bruhsplit";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
