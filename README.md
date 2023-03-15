@@ -2,7 +2,7 @@
 A bad knockoff of [Livesplit](https://livesplit.org/)
 
 # Controls
-Press F2 to start/end timer
+Press F2 to start/end timer<br/>
 Press F3 to pause timer
 
 # Uhh
