@@ -19,6 +19,7 @@ namespace bruhsplit
         private Point dragPoint = new Point();
         private string status = "None";
         private double startTime = 0;
+        private double savedTime = 0;
         IDictionary<string, bool> options = new Dictionary<string, bool>();
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
@@ -69,7 +70,13 @@ namespace bruhsplit
             TimerText.AutoSize = true;
             TimerText.Text = "im pau";
             TimerText.Size = new Size(Width, Height);
+            MSTimer.AutoSize = true;
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            //MSTimer.BackColor = Color.SaddleBrown;
+            //TransparencyKey = Color.SaddleBrown;
             //KeyPreview = true;
+            MSTimer.BackColor = Color.Transparent;
+            TimerText.BackColor = Color.Transparent;
 
             _globalKeyboardHook = new GlobalKeyboardHook();
             _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
@@ -77,6 +84,7 @@ namespace bruhsplit
             Load += new EventHandler(Form1_Load);
 
             options.Add("LivesplitStyleFormatting", false);
+            options.Add("SmallMSText", true);
             Task.Run(async () => { await loadData(); });
         }
         private string formatTime(float time)
@@ -85,15 +93,20 @@ namespace bruhsplit
             int sec = (int)Math.Floor(time % 60);
             int ms = (int)Math.Floor((time % 1) * 100);
             int hour = (int)Math.Floor(time/(60*60));
+            var finalStr = "";
 
-            if (options["LivesplitStyleFormatting"] && min == 0 && hour == 0) {
-                return String.Format("{0}.{1:D2}", sec, ms);
-            }
             if (hour == 0) {
-                return String.Format("{0}:{1:D2}.{2:D2}", min, sec, ms);
+                finalStr = String.Format("{0}:{1:D2}.{2:D2}", min, sec, ms);
             } else {
-                return String.Format("{0}:{1:D2}:{2:D2}.{3:D2}", hour, min, sec, ms);
+                finalStr = String.Format("{0}:{1:D2}:{2:D2}.{3:D2}", hour, min, sec, ms);
             }
+            if (options["LivesplitStyleFormatting"] && min == 0 && hour == 0) {
+                finalStr = String.Format("{0}.{1:D2}", sec, ms);
+            }
+            if (options["SmallMSText"]) {
+                finalStr = finalStr.Substring(0, finalStr.Length - 3);
+            }
+            return finalStr;
         }
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -115,6 +128,10 @@ namespace bruhsplit
             }
         }
 
+        private double getTime() {
+            return (DateTimeOffset.Now.ToUnixTimeMilliseconds() - startTime) / 1000;
+        }
+
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
             // EDT: No need to filter for VkSnapshot anymore. This now gets handled
@@ -124,32 +141,61 @@ namespace bruhsplit
                 // Now you can access both, the key and virtual code
                 Keys loggedKey = e.KeyboardData.Key;
                 int loggedVkCode = e.KeyboardData.VirtualCode;
-                if (loggedKey.ToString() == "F1") {
+                if (loggedKey.ToString() == "F2") {
                     if (status == "Running") {
-                        status = "Paused";
-                    } else if (status == "Paused") {
+                        status = "Ended";
+                        savedTime = getTime();
+                    } else if (status == "Ended") {
                         status = "None";
                     } else if (status == "None") {
                         status = "Running";
                         startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     }
+                } else if (loggedKey.ToString() == "F3") {
+                    if (status == "Running") {
+                        status = "Paused";
+                        savedTime = getTime();
+                    } else if (status == "Paused") {
+                        status = "Running";
+                        startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - savedTime*1000;
+                    };
                 }
             }
+        }
+
+        private string formatTimeMs(float timee) {
+            return String.Format(".{0:D2}", (int)Math.Floor((timee%1) * 100));
         }
 
         private void UpdateFrame(object sender, ElapsedEventArgs e)
         {
             Invoke(new Action(() => {
-                TimerText.Location = new Point(Width - TimerText.Width-5, (100-85)/2);
                 if (status == "None") {
                     TimerText.Text = formatTime(0);
+                    MSTimer.Text = formatTimeMs(0);
                     TimerText.ForeColor = Color.LightGray;
                 } else if (status == "Running") {
-                    TimerText.Text = formatTime((float)(DateTimeOffset.Now.ToUnixTimeMilliseconds()-startTime)/1000);
-                    TimerText.ForeColor = Color.Green;
-                } else if (status == "Paused") {
+                    var curTime = (float)getTime();
+                    TimerText.Text = formatTime(curTime);
+                    MSTimer.Text = formatTimeMs(curTime);
+                    TimerText.ForeColor = Color.LightGreen;
+                } else if (status == "Ended") {
+                    TimerText.Text = formatTime((float)savedTime);
+                    MSTimer.Text = formatTimeMs((float)savedTime);
                     TimerText.ForeColor = Color.Cyan;
+                } else if (status == "Paused") {
+                    TimerText.ForeColor = Color.LightGray;
+                    TimerText.Text = formatTime((float)savedTime);
+                    MSTimer.Text = formatTimeMs((float)savedTime);
                 }
+                var MSTimerWidth = MSTimer.Width;
+                if (!options["SmallMSText"]) {
+                    MSTimerWidth = 5;
+                    MSTimer.Text = "";
+                }
+                MSTimer.ForeColor = TimerText.ForeColor;
+                MSTimer.Location = new Point(Width - MSTimerWidth - 5, (50 - 46) / 2+11);
+                TimerText.Location = new Point(Width - TimerText.Width-MSTimerWidth+9, (50-46)/2);
             }));
         }
         private void Form1_Load(object sender, EventArgs e) {
@@ -171,8 +217,7 @@ namespace bruhsplit
             Environment.Exit(0);
         }
 
-        private void LivesplitStyleFormattingContext_Click(object sender, EventArgs e) {
-            optionHandler((ToolStripMenuItem)sender);
-        }
+        private void LivesplitStyleFormattingContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
+        private void SmallMSTextContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
     }
 }

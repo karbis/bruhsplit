@@ -35,17 +35,20 @@ namespace bruhsplit
             this.QuitStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LivesplitStyleFormattingContext = new System.Windows.Forms.ToolStripMenuItem();
+            this.MSTimer = new System.Windows.Forms.Label();
+            this.SmallMSTextContext = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TimerText
             // 
             this.TimerText.AutoSize = true;
-            this.TimerText.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F);
+            this.TimerText.BackColor = System.Drawing.Color.Transparent;
+            this.TimerText.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.TimerText.ForeColor = System.Drawing.Color.White;
-            this.TimerText.Location = new System.Drawing.Point(12, 9);
+            this.TimerText.Location = new System.Drawing.Point(115, -10);
             this.TimerText.Name = "TimerText";
-            this.TimerText.Size = new System.Drawing.Size(173, 63);
+            this.TimerText.Size = new System.Drawing.Size(126, 46);
             this.TimerText.TabIndex = 1;
             this.TimerText.Text = "label1";
             // 
@@ -55,7 +58,7 @@ namespace bruhsplit
             this.QuitStrip,
             this.optionsToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(117, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
             // 
             // QuitStrip
             // 
@@ -67,7 +70,8 @@ namespace bruhsplit
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.LivesplitStyleFormattingContext});
+            this.LivesplitStyleFormattingContext,
+            this.SmallMSTextContext});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -79,13 +83,35 @@ namespace bruhsplit
             this.LivesplitStyleFormattingContext.Text = "Livesplit-style time formatting";
             this.LivesplitStyleFormattingContext.Click += new System.EventHandler(this.LivesplitStyleFormattingContext_Click);
             // 
+            // MSTimer
+            // 
+            this.MSTimer.AutoSize = true;
+            this.MSTimer.BackColor = System.Drawing.Color.Transparent;
+            this.MSTimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
+            this.MSTimer.ForeColor = System.Drawing.Color.White;
+            this.MSTimer.Location = new System.Drawing.Point(45, 9);
+            this.MSTimer.Name = "MSTimer";
+            this.MSTimer.Size = new System.Drawing.Size(86, 31);
+            this.MSTimer.TabIndex = 2;
+            this.MSTimer.Text = "label1";
+            // 
+            // SmallMSTextContext
+            // 
+            this.SmallMSTextContext.Checked = true;
+            this.SmallMSTextContext.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.SmallMSTextContext.Name = "SmallMSTextContext";
+            this.SmallMSTextContext.Size = new System.Drawing.Size(233, 22);
+            this.SmallMSTextContext.Text = "Small MS Text";
+            this.SmallMSTextContext.Click += new System.EventHandler(this.SmallMSTextContext_Click);
+            // 
             // Bruhsplit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(300, 75);
+            this.ClientSize = new System.Drawing.Size(250, 50);
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.MSTimer);
             this.Controls.Add(this.TimerText);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Bruhsplit";
@@ -102,6 +128,8 @@ namespace bruhsplit
         private System.Windows.Forms.ToolStripMenuItem QuitStrip;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem LivesplitStyleFormattingContext;
+        private System.Windows.Forms.Label MSTimer;
+        private System.Windows.Forms.ToolStripMenuItem SmallMSTextContext;
     }
 }
 
