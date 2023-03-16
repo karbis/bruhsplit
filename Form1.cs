@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Timers;
 using System.IO;
+using System.Drawing.Drawing2D;
 
 namespace bruhsplit
 {
@@ -20,7 +21,7 @@ namespace bruhsplit
         private string status = "None";
         private double startTime = 0;
         private double savedTime = 0;
-        IDictionary<string, bool> options = new Dictionary<string, bool>();
+        IDictionary<string, dynamic> options = new Dictionary<string, dynamic>();
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
@@ -43,14 +44,19 @@ namespace bruhsplit
             string text = "";
             try {
                 await Task.Run(() => { text = File.ReadAllText("options.txt"); });
-            } catch (Exception) {
+            }
+            catch (Exception) {
                 Console.WriteLine("No data found");
             };
             if (text == "") { return; };
             string[] newData = text.Split(';'); // why does " and ' have a difference in c#
             foreach (var data in newData) {
                 var dict = data.Split('=');
-                options[dict[0]] = dict[1] == "True";
+                if (dict[1] == "True" || dict[1] == "False") {
+                    options[dict[0]] = dict[1] == "True";
+                } else {
+                    options[dict[0]] = dict[1];
+                };
                 foreach (ToolStripMenuItem test in optionsToolStripMenuItem.DropDownItems) {
                     if (test.Name == dict[0] + "Context") {
                         test.Checked = dict[1] == "True";
@@ -60,8 +66,7 @@ namespace bruhsplit
             };
         }
 
-        public Bruhsplit()
-        {
+        public Bruhsplit() {
             InitializeComponent();
             setUpMovement(this);
             //setUpMovement(TimerText);
@@ -85,14 +90,14 @@ namespace bruhsplit
 
             options.Add("LivesplitStyleFormatting", false);
             options.Add("SmallMSText", true);
+            options.Add("GradientText", true);
             Task.Run(async () => { await loadData(); });
         }
-        private string formatTime(float time)
-        {
-            int min = (int)Math.Floor((time / 60)%60);
+        private string formatTime(float time) {
+            int min = (int)Math.Floor((time / 60) % 60);
             int sec = (int)Math.Floor(time % 60);
             int ms = (int)Math.Floor((time % 1) * 100);
-            int hour = (int)Math.Floor(time/(60*60));
+            int hour = (int)Math.Floor(time / (60 * 60));
             var finalStr = "";
 
             if (hour == 0) {
@@ -108,23 +113,20 @@ namespace bruhsplit
             }
             return finalStr;
         }
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
-        {
+        private void Form1_MouseDown(object sender, MouseEventArgs e) {
             if (e.Button != MouseButtons.Left) { return; }
             // DebugMsg.Text = "down";
             dragging = true;
             dragPoint = e.Location;
         }
-        private void Form1_MouseUp(object sender, MouseEventArgs e)
-        {
+        private void Form1_MouseUp(object sender, MouseEventArgs e) {
             if (e.Button != MouseButtons.Left) { return; }
             // DebugMsg.Text = "up";
             dragging = false;
         }
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
-        {
+        private void Form1_MouseMove(object sender, MouseEventArgs e) {
             if (dragging) {
-                MoveWindow(Handle, Cursor.Position.X-dragPoint.X, Cursor.Position.Y - dragPoint.Y, Width,Height,true);
+                MoveWindow(Handle, Cursor.Position.X - dragPoint.X, Cursor.Position.Y - dragPoint.Y, Width, Height, true);
             }
         }
 
@@ -132,12 +134,10 @@ namespace bruhsplit
             return (DateTimeOffset.Now.ToUnixTimeMilliseconds() - startTime) / 1000;
         }
 
-        private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
-        {
+        private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e) {
             // EDT: No need to filter for VkSnapshot anymore. This now gets handled
             // through the constructor of GlobalKeyboardHook(...).
-            if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown)
-            {
+            if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown) {
                 // Now you can access both, the key and virtual code
                 Keys loggedKey = e.KeyboardData.Key;
                 int loggedVkCode = e.KeyboardData.VirtualCode;
@@ -157,18 +157,31 @@ namespace bruhsplit
                         savedTime = getTime();
                     } else if (status == "Paused") {
                         status = "Running";
-                        startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - savedTime*1000;
+                        startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - savedTime * 1000;
                     };
                 }
             }
         }
 
         private string formatTimeMs(float timee) {
-            return String.Format(".{0:D2}", (int)Math.Floor((timee%1) * 100));
+            return String.Format(".{0:D2}", (int)Math.Floor((timee % 1) * 100));
         }
 
-        private void UpdateFrame(object sender, ElapsedEventArgs e)
-        {
+        private void makeCapGradientText(Label og, Label cap) {
+            if (!options["GradientText"]) {
+                cap.Size = new Size(0, 0);
+                return;
+            }
+            cap.Location = new Point(og.Location.X, og.Location.Y);
+            cap.AutoSize = false;
+            cap.Size = new Size(og.Size.Width, og.Size.Height / 2);
+            cap.Text = og.Text;
+            var oldColor = og.ForeColor;
+            og.ForeColor = ControlPaint.Dark(oldColor,(float)-.2);
+            cap.ForeColor = oldColor;
+        }
+
+        private void UpdateFrame(object sender, ElapsedEventArgs e) {
             Invoke(new Action(() => {
                 if (status == "None") {
                     TimerText.Text = formatTime(0);
@@ -176,7 +189,7 @@ namespace bruhsplit
                     TimerText.ForeColor = Color.LightGray;
                 } else if (status == "Running") {
                     var curTime = (float)getTime();
-                    TimerText.Text = formatTime(curTime);
+                    TimerText.Text = formatTime(curTime); 
                     MSTimer.Text = formatTimeMs(curTime);
                     TimerText.ForeColor = Color.LightGreen;
                 } else if (status == "Ended") {
@@ -194,8 +207,10 @@ namespace bruhsplit
                     MSTimer.Text = "";
                 }
                 MSTimer.ForeColor = TimerText.ForeColor;
-                MSTimer.Location = new Point(Width - MSTimerWidth - 5, (50 - 46) / 2+11);
-                TimerText.Location = new Point(Width - TimerText.Width-MSTimerWidth+9, (50-46)/2);
+                MSTimer.Location = new Point(Width - MSTimerWidth - 5, (50 - 46) / 2 + 12);
+                TimerText.Location = new Point(Width - TimerText.Width - MSTimerWidth + 9, (50 - 46) / 2);
+                makeCapGradientText(TimerText, TimerText2);
+                makeCapGradientText(MSTimer, MSTimer2);
             }));
         }
         private void Form1_Load(object sender, EventArgs e) {
@@ -219,5 +234,6 @@ namespace bruhsplit
 
         private void LivesplitStyleFormattingContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
         private void SmallMSTextContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
+        private void GradientTextContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
     }
-}
+};
