@@ -32,10 +32,23 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LivesplitStyleFormattingContext = new System.Windows.Forms.ToolStripMenuItem();
             this.SmallMSTextContext = new System.Windows.Forms.ToolStripMenuItem();
+            this.GradientTextContext = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.keybindSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.StartKeybindTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.pauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PauseKeybindTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.colorSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nothingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PausedColorTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.runningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RunningColorTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.completedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CompletedColorTextbox = new System.Windows.Forms.ToolStripTextBox();
             this.MSTimer = new System.Windows.Forms.Label();
             this.TimerText2 = new System.Windows.Forms.Label();
             this.MSTimer2 = new System.Windows.Forms.Label();
-            this.GradientTextContext = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,11 +56,11 @@
             // 
             this.TimerText.AutoSize = true;
             this.TimerText.BackColor = System.Drawing.Color.Transparent;
-            this.TimerText.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.TimerText.Font = new System.Drawing.Font("Microsoft Sans Serif", 31F, System.Drawing.FontStyle.Bold);
             this.TimerText.ForeColor = System.Drawing.Color.White;
-            this.TimerText.Location = new System.Drawing.Point(115, -10);
+            this.TimerText.Location = new System.Drawing.Point(12, -3);
             this.TimerText.Name = "TimerText";
-            this.TimerText.Size = new System.Drawing.Size(126, 46);
+            this.TimerText.Size = new System.Drawing.Size(138, 48);
             this.TimerText.TabIndex = 1;
             this.TimerText.Text = "label1";
             // 
@@ -71,7 +84,10 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LivesplitStyleFormattingContext,
             this.SmallMSTextContext,
-            this.GradientTextContext});
+            this.GradientTextContext,
+            this.toolStripSeparator1,
+            this.keybindSettingsToolStripMenuItem,
+            this.colorSettingsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -92,42 +108,6 @@
             this.SmallMSTextContext.Text = "Small MS Text";
             this.SmallMSTextContext.Click += new System.EventHandler(this.SmallMSTextContext_Click);
             // 
-            // MSTimer
-            // 
-            this.MSTimer.AutoSize = true;
-            this.MSTimer.BackColor = System.Drawing.Color.Transparent;
-            this.MSTimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
-            this.MSTimer.ForeColor = System.Drawing.Color.White;
-            this.MSTimer.Location = new System.Drawing.Point(45, 9);
-            this.MSTimer.Name = "MSTimer";
-            this.MSTimer.Size = new System.Drawing.Size(86, 31);
-            this.MSTimer.TabIndex = 2;
-            this.MSTimer.Text = "label1";
-            // 
-            // TimerText2
-            // 
-            this.TimerText2.AutoSize = true;
-            this.TimerText2.BackColor = System.Drawing.Color.Transparent;
-            this.TimerText2.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
-            this.TimerText2.ForeColor = System.Drawing.Color.White;
-            this.TimerText2.Location = new System.Drawing.Point(62, 2);
-            this.TimerText2.Name = "TimerText2";
-            this.TimerText2.Size = new System.Drawing.Size(126, 46);
-            this.TimerText2.TabIndex = 3;
-            this.TimerText2.Text = "label1";
-            // 
-            // MSTimer2
-            // 
-            this.MSTimer2.AutoSize = true;
-            this.MSTimer2.BackColor = System.Drawing.Color.Transparent;
-            this.MSTimer2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
-            this.MSTimer2.ForeColor = System.Drawing.Color.White;
-            this.MSTimer2.Location = new System.Drawing.Point(82, 10);
-            this.MSTimer2.Name = "MSTimer2";
-            this.MSTimer2.Size = new System.Drawing.Size(86, 31);
-            this.MSTimer2.TabIndex = 4;
-            this.MSTimer2.Text = "label1";
-            // 
             // GradientTextContext
             // 
             this.GradientTextContext.Checked = true;
@@ -136,6 +116,140 @@
             this.GradientTextContext.Size = new System.Drawing.Size(233, 22);
             this.GradientTextContext.Text = "Gradient Text";
             this.GradientTextContext.Click += new System.EventHandler(this.GradientTextContext_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(230, 6);
+            // 
+            // keybindSettingsToolStripMenuItem
+            // 
+            this.keybindSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.startToolStripMenuItem,
+            this.StartKeybindTextbox,
+            this.pauseToolStripMenuItem,
+            this.PauseKeybindTextbox});
+            this.keybindSettingsToolStripMenuItem.Name = "keybindSettingsToolStripMenuItem";
+            this.keybindSettingsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.keybindSettingsToolStripMenuItem.Text = "Keybind settings";
+            // 
+            // startToolStripMenuItem
+            // 
+            this.startToolStripMenuItem.Name = "startToolStripMenuItem";
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.startToolStripMenuItem.Text = "[Start/End]";
+            // 
+            // StartKeybindTextbox
+            // 
+            this.StartKeybindTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.StartKeybindTextbox.Name = "StartKeybindTextbox";
+            this.StartKeybindTextbox.Size = new System.Drawing.Size(100, 23);
+            this.StartKeybindTextbox.Text = "F2";
+            this.StartKeybindTextbox.LostFocus += new System.EventHandler(this.StartKeybindTextbox_LostFocus);
+            // 
+            // pauseToolStripMenuItem
+            // 
+            this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pauseToolStripMenuItem.Text = "[Pause]";
+            // 
+            // PauseKeybindTextbox
+            // 
+            this.PauseKeybindTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.PauseKeybindTextbox.Name = "PauseKeybindTextbox";
+            this.PauseKeybindTextbox.Size = new System.Drawing.Size(100, 23);
+            this.PauseKeybindTextbox.Text = "F3";
+            // 
+            // colorSettingsToolStripMenuItem
+            // 
+            this.colorSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nothingToolStripMenuItem,
+            this.PausedColorTextbox,
+            this.runningToolStripMenuItem,
+            this.RunningColorTextbox,
+            this.completedToolStripMenuItem,
+            this.CompletedColorTextbox});
+            this.colorSettingsToolStripMenuItem.Name = "colorSettingsToolStripMenuItem";
+            this.colorSettingsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.colorSettingsToolStripMenuItem.Text = "Color settings";
+            // 
+            // nothingToolStripMenuItem
+            // 
+            this.nothingToolStripMenuItem.Name = "nothingToolStripMenuItem";
+            this.nothingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nothingToolStripMenuItem.Text = "[Paused/Nothing]";
+            // 
+            // PausedColorTextbox
+            // 
+            this.PausedColorTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.PausedColorTextbox.Name = "PausedColorTextbox";
+            this.PausedColorTextbox.Size = new System.Drawing.Size(100, 23);
+            this.PausedColorTextbox.Text = "211, 211, 211";
+            this.PausedColorTextbox.LostFocus += new System.EventHandler(this.PausedColorTextbox_LostFocus);
+            // 
+            // runningToolStripMenuItem
+            // 
+            this.runningToolStripMenuItem.Name = "runningToolStripMenuItem";
+            this.runningToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runningToolStripMenuItem.Text = "[Running]";
+            // 
+            // RunningColorTextbox
+            // 
+            this.RunningColorTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.RunningColorTextbox.Name = "RunningColorTextbox";
+            this.RunningColorTextbox.Size = new System.Drawing.Size(100, 23);
+            this.RunningColorTextbox.Text = "144, 238, 144";
+            this.RunningColorTextbox.LostFocus += new System.EventHandler(this.RunningColorTextbox_LostFocus);
+            // 
+            // completedToolStripMenuItem
+            // 
+            this.completedToolStripMenuItem.Name = "completedToolStripMenuItem";
+            this.completedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.completedToolStripMenuItem.Text = "[Completed]";
+            // 
+            // CompletedColorTextbox
+            // 
+            this.CompletedColorTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.CompletedColorTextbox.Name = "CompletedColorTextbox";
+            this.CompletedColorTextbox.Size = new System.Drawing.Size(100, 23);
+            this.CompletedColorTextbox.Text = "0, 255, 255";
+            this.CompletedColorTextbox.LostFocus += new System.EventHandler(this.CompletedColorTextbox_LostFocus);
+            // 
+            // MSTimer
+            // 
+            this.MSTimer.AutoSize = true;
+            this.MSTimer.BackColor = System.Drawing.Color.Transparent;
+            this.MSTimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold);
+            this.MSTimer.ForeColor = System.Drawing.Color.White;
+            this.MSTimer.Location = new System.Drawing.Point(45, 9);
+            this.MSTimer.Name = "MSTimer";
+            this.MSTimer.Size = new System.Drawing.Size(99, 32);
+            this.MSTimer.TabIndex = 2;
+            this.MSTimer.Text = "label1";
+            // 
+            // TimerText2
+            // 
+            this.TimerText2.AutoSize = true;
+            this.TimerText2.BackColor = System.Drawing.Color.Transparent;
+            this.TimerText2.Font = new System.Drawing.Font("Microsoft Sans Serif", 31F, System.Drawing.FontStyle.Bold);
+            this.TimerText2.ForeColor = System.Drawing.Color.White;
+            this.TimerText2.Location = new System.Drawing.Point(137, -5);
+            this.TimerText2.Name = "TimerText2";
+            this.TimerText2.Size = new System.Drawing.Size(138, 48);
+            this.TimerText2.TabIndex = 3;
+            this.TimerText2.Text = "label1";
+            // 
+            // MSTimer2
+            // 
+            this.MSTimer2.AutoSize = true;
+            this.MSTimer2.BackColor = System.Drawing.Color.Transparent;
+            this.MSTimer2.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold);
+            this.MSTimer2.ForeColor = System.Drawing.Color.White;
+            this.MSTimer2.Location = new System.Drawing.Point(137, 6);
+            this.MSTimer2.Name = "MSTimer2";
+            this.MSTimer2.Size = new System.Drawing.Size(99, 32);
+            this.MSTimer2.TabIndex = 4;
+            this.MSTimer2.Text = "label1";
             // 
             // Bruhsplit
             // 
@@ -168,5 +282,18 @@
         private System.Windows.Forms.Label TimerText2;
         private System.Windows.Forms.Label MSTimer2;
         private System.Windows.Forms.ToolStripMenuItem GradientTextContext;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem keybindSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox StartKeybindTextbox;
+        private System.Windows.Forms.ToolStripMenuItem pauseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox PauseKeybindTextbox;
+        private System.Windows.Forms.ToolStripMenuItem colorSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nothingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox PausedColorTextbox;
+        private System.Windows.Forms.ToolStripMenuItem runningToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox RunningColorTextbox;
+        private System.Windows.Forms.ToolStripMenuItem completedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox CompletedColorTextbox;
     }
 }

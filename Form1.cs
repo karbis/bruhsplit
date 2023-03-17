@@ -40,6 +40,14 @@ namespace bruhsplit
             };
             await Task.Run(() => File.WriteAllText("options.txt", saveStr));
         }
+        private void textBoxCheck(dynamic loopThrough, dynamic dict) {
+            foreach (dynamic test in loopThrough) {
+                if (test.Name == dict[0] + "Textbox") {
+                    test.Text = dict[1];
+                    break;
+                };
+            };
+        }
         private async Task loadData() {
             string text = "";
             try {
@@ -57,12 +65,15 @@ namespace bruhsplit
                 } else {
                     options[dict[0]] = dict[1];
                 };
-                foreach (ToolStripMenuItem test in optionsToolStripMenuItem.DropDownItems) {
-                    if (test.Name == dict[0] + "Context") {
-                        test.Checked = dict[1] == "True";
-                        break;
+                Invoke((MethodInvoker)delegate {
+                    foreach (dynamic test in optionsToolStripMenuItem.DropDownItems) {
+                        if (test.Name == dict[0] + "Context") {
+                            test.Checked = dict[1] == "True";
+                        };
                     };
-                };
+                    textBoxCheck(keybindSettingsToolStripMenuItem.DropDownItems,dict);
+                    textBoxCheck(colorSettingsToolStripMenuItem.DropDownItems,dict);
+                });
             };
         }
 
@@ -70,7 +81,6 @@ namespace bruhsplit
             InitializeComponent();
             setUpMovement(this);
             //setUpMovement(TimerText);
-            Console.WriteLine("HELLO");
             TopMost = true;
             TimerText.AutoSize = true;
             TimerText.Text = "im pau";
@@ -91,6 +101,11 @@ namespace bruhsplit
             options.Add("LivesplitStyleFormatting", false);
             options.Add("SmallMSText", true);
             options.Add("GradientText", true);
+            options.Add("StartKeybind", "F2");
+            options.Add("PauseKeybind", "F3");
+            options.Add("RunningColor", "144, 238, 144");
+            options.Add("PausedColor", "211, 211, 211");
+            options.Add("CompletedColor", "0, 255, 255");
             Task.Run(async () => { await loadData(); });
         }
         private string formatTime(float time) {
@@ -141,7 +156,7 @@ namespace bruhsplit
                 // Now you can access both, the key and virtual code
                 Keys loggedKey = e.KeyboardData.Key;
                 int loggedVkCode = e.KeyboardData.VirtualCode;
-                if (loggedKey.ToString() == "F2") {
+                if (loggedKey.ToString() == options["StartKeybind"]) {
                     if (status == "Running") {
                         status = "Ended";
                         savedTime = getTime();
@@ -151,7 +166,7 @@ namespace bruhsplit
                         status = "Running";
                         startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     }
-                } else if (loggedKey.ToString() == "F3") {
+                } else if (loggedKey.ToString() == options["PauseKeybind"]) {
                     if (status == "Running") {
                         status = "Paused";
                         savedTime = getTime();
@@ -177,8 +192,22 @@ namespace bruhsplit
             cap.Size = new Size(og.Size.Width, og.Size.Height / 2);
             cap.Text = og.Text;
             var oldColor = og.ForeColor;
-            og.ForeColor = ControlPaint.Dark(oldColor,(float)-.2);
+            og.ForeColor = ControlPaint.Dark(oldColor, (float)-.2);
             cap.ForeColor = oldColor;
+        }
+        
+        private Color stringToColor(string color) {
+            var split = color.Split(',');
+            var r = 255;
+            var g = 255;
+            var b = 255;
+            try {
+                r = Int32.Parse(split[0]);
+                g = Int32.Parse(split[1]);
+                b = Int32.Parse(split[2]);
+            } catch { };
+
+            return Color.FromArgb(r, g, b);
         }
 
         private void UpdateFrame(object sender, ElapsedEventArgs e) {
@@ -186,18 +215,18 @@ namespace bruhsplit
                 if (status == "None") {
                     TimerText.Text = formatTime(0);
                     MSTimer.Text = formatTimeMs(0);
-                    TimerText.ForeColor = Color.LightGray;
+                    TimerText.ForeColor = stringToColor(options["PausedColor"]);
                 } else if (status == "Running") {
                     var curTime = (float)getTime();
-                    TimerText.Text = formatTime(curTime); 
+                    TimerText.Text = formatTime(curTime);
                     MSTimer.Text = formatTimeMs(curTime);
-                    TimerText.ForeColor = Color.LightGreen;
+                    TimerText.ForeColor = stringToColor(options["RunningColor"]);
                 } else if (status == "Ended") {
                     TimerText.Text = formatTime((float)savedTime);
                     MSTimer.Text = formatTimeMs((float)savedTime);
-                    TimerText.ForeColor = Color.Cyan;
+                    TimerText.ForeColor = stringToColor(options["CompletedColor"]);
                 } else if (status == "Paused") {
-                    TimerText.ForeColor = Color.LightGray;
+                    TimerText.ForeColor = stringToColor(options["PausedColor"]);
                     TimerText.Text = formatTime((float)savedTime);
                     MSTimer.Text = formatTimeMs((float)savedTime);
                 }
@@ -207,8 +236,8 @@ namespace bruhsplit
                     MSTimer.Text = "";
                 }
                 MSTimer.ForeColor = TimerText.ForeColor;
-                MSTimer.Location = new Point(Width - MSTimerWidth - 5, (50 - 46) / 2 + 12);
-                TimerText.Location = new Point(Width - TimerText.Width - MSTimerWidth + 9, (50 - 46) / 2);
+                MSTimer.Location = new Point(Width - MSTimerWidth - 5, (50 - 48) / 2 + 14);
+                TimerText.Location = new Point(Width - TimerText.Width - MSTimerWidth + 8, (50 - 48) / 2);
                 makeCapGradientText(TimerText, TimerText2);
                 makeCapGradientText(MSTimer, MSTimer2);
             }));
@@ -227,6 +256,12 @@ namespace bruhsplit
             options[words[0]] = sender.Checked;
             Task.Run(async () => { await saveData(); });
         }
+        private void optionHandlerText(ToolStripTextBox sender) {
+            string[] seperate = { "Textbox" };
+            string[] words = sender.Name.Split(seperate, StringSplitOptions.RemoveEmptyEntries);
+            options[words[0]] = sender.Text;
+            Task.Run(async () => { await saveData(); });
+        }
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e) {
             Environment.Exit(0);
@@ -235,5 +270,9 @@ namespace bruhsplit
         private void LivesplitStyleFormattingContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
         private void SmallMSTextContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
         private void GradientTextContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
+        private void StartKeybindTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
+        private void PausedColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
+        private void RunningColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
+        private void CompletedColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
     }
 };
