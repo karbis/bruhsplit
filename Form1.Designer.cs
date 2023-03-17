@@ -33,12 +33,18 @@
             this.LivesplitStyleFormattingContext = new System.Windows.Forms.ToolStripMenuItem();
             this.SmallMSTextContext = new System.Windows.Forms.ToolStripMenuItem();
             this.GradientTextContext = new System.Windows.Forms.ToolStripMenuItem();
+            this.HideAttemptsContext = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExitPopupContext = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.keybindSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StartKeybindTextbox = new System.Windows.Forms.ToolStripTextBox();
             this.pauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PauseKeybindTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.endToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EndKeybindTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.KeyTesterToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.colorSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nothingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PausedColorTextbox = new System.Windows.Forms.ToolStripTextBox();
@@ -46,13 +52,15 @@
             this.RunningColorTextbox = new System.Windows.Forms.ToolStripTextBox();
             this.completedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CompletedColorTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.otherSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mSTextPrecisionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MsTextPrecisionTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ResetAttemptsButton = new System.Windows.Forms.ToolStripMenuItem();
             this.MSTimer = new System.Windows.Forms.Label();
             this.TimerText2 = new System.Windows.Forms.Label();
             this.MSTimer2 = new System.Windows.Forms.Label();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.ResetAttemptsButton = new System.Windows.Forms.ToolStripMenuItem();
             this.AttemptsCount = new System.Windows.Forms.Label();
-            this.HideAttemptsContext = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,9 +100,11 @@
             this.SmallMSTextContext,
             this.GradientTextContext,
             this.HideAttemptsContext,
+            this.ExitPopupContext,
             this.toolStripSeparator1,
             this.keybindSettingsToolStripMenuItem,
-            this.colorSettingsToolStripMenuItem});
+            this.colorSettingsToolStripMenuItem,
+            this.otherSettingsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -124,6 +134,22 @@
             this.GradientTextContext.Text = "Gradient Text";
             this.GradientTextContext.Click += new System.EventHandler(this.GradientTextContext_Click);
             // 
+            // HideAttemptsContext
+            // 
+            this.HideAttemptsContext.Name = "HideAttemptsContext";
+            this.HideAttemptsContext.Size = new System.Drawing.Size(233, 22);
+            this.HideAttemptsContext.Text = "Hide attempts text";
+            this.HideAttemptsContext.Click += new System.EventHandler(this.HideAttemptsContext_Click);
+            // 
+            // ExitPopupContext
+            // 
+            this.ExitPopupContext.Checked = true;
+            this.ExitPopupContext.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ExitPopupContext.Name = "ExitPopupContext";
+            this.ExitPopupContext.Size = new System.Drawing.Size(233, 22);
+            this.ExitPopupContext.Text = "Exit popup";
+            this.ExitPopupContext.Click += new System.EventHandler(this.ExitPopupContext_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -135,7 +161,11 @@
             this.startToolStripMenuItem,
             this.StartKeybindTextbox,
             this.pauseToolStripMenuItem,
-            this.PauseKeybindTextbox});
+            this.PauseKeybindTextbox,
+            this.endToolStripMenuItem,
+            this.EndKeybindTextbox,
+            this.toolStripSeparator3,
+            this.KeyTesterToolStrip});
             this.keybindSettingsToolStripMenuItem.Name = "keybindSettingsToolStripMenuItem";
             this.keybindSettingsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.keybindSettingsToolStripMenuItem.Text = "Keybind settings";
@@ -143,7 +173,7 @@
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.startToolStripMenuItem.Text = "[Start/End]";
             // 
             // StartKeybindTextbox
@@ -157,7 +187,7 @@
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pauseToolStripMenuItem.Text = "[Pause]";
             // 
             // PauseKeybindTextbox
@@ -166,6 +196,31 @@
             this.PauseKeybindTextbox.Name = "PauseKeybindTextbox";
             this.PauseKeybindTextbox.Size = new System.Drawing.Size(100, 23);
             this.PauseKeybindTextbox.Text = "F3";
+            // 
+            // endToolStripMenuItem
+            // 
+            this.endToolStripMenuItem.Name = "endToolStripMenuItem";
+            this.endToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.endToolStripMenuItem.Text = "[End]";
+            // 
+            // EndKeybindTextbox
+            // 
+            this.EndKeybindTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.EndKeybindTextbox.Name = "EndKeybindTextbox";
+            this.EndKeybindTextbox.Size = new System.Drawing.Size(100, 23);
+            this.EndKeybindTextbox.Text = "None";
+            this.EndKeybindTextbox.LostFocus += new System.EventHandler(this.EndKeybindTextbox_LostFocus);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // KeyTesterToolStrip
+            // 
+            this.KeyTesterToolStrip.Name = "KeyTesterToolStrip";
+            this.KeyTesterToolStrip.Size = new System.Drawing.Size(180, 22);
+            this.KeyTesterToolStrip.Text = "Key tester: None";
             // 
             // colorSettingsToolStripMenuItem
             // 
@@ -222,6 +277,41 @@
             this.CompletedColorTextbox.Text = "0, 255, 255";
             this.CompletedColorTextbox.LostFocus += new System.EventHandler(this.CompletedColorTextbox_LostFocus);
             // 
+            // otherSettingsToolStripMenuItem
+            // 
+            this.otherSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mSTextPrecisionToolStripMenuItem,
+            this.MsTextPrecisionTextbox});
+            this.otherSettingsToolStripMenuItem.Name = "otherSettingsToolStripMenuItem";
+            this.otherSettingsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.otherSettingsToolStripMenuItem.Text = "Other settings";
+            // 
+            // mSTextPrecisionToolStripMenuItem
+            // 
+            this.mSTextPrecisionToolStripMenuItem.Name = "mSTextPrecisionToolStripMenuItem";
+            this.mSTextPrecisionToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.mSTextPrecisionToolStripMenuItem.Text = "[MS Text Precision]";
+            // 
+            // MsTextPrecisionTextbox
+            // 
+            this.MsTextPrecisionTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.MsTextPrecisionTextbox.Name = "MsTextPrecisionTextbox";
+            this.MsTextPrecisionTextbox.Size = new System.Drawing.Size(100, 23);
+            this.MsTextPrecisionTextbox.Text = "2";
+            this.MsTextPrecisionTextbox.LostFocus += new System.EventHandler(this.MsTextPrecisionTextbox_LostFocus);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // ResetAttemptsButton
+            // 
+            this.ResetAttemptsButton.Name = "ResetAttemptsButton";
+            this.ResetAttemptsButton.Size = new System.Drawing.Size(180, 22);
+            this.ResetAttemptsButton.Text = "Reset Attempts";
+            this.ResetAttemptsButton.Click += new System.EventHandler(this.ResetAttemptsButton_Click);
+            // 
             // MSTimer
             // 
             this.MSTimer.AutoSize = true;
@@ -258,18 +348,6 @@
             this.MSTimer2.TabIndex = 4;
             this.MSTimer2.Text = "label1";
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-            // 
-            // ResetAttemptsButton
-            // 
-            this.ResetAttemptsButton.Name = "ResetAttemptsButton";
-            this.ResetAttemptsButton.Size = new System.Drawing.Size(180, 22);
-            this.ResetAttemptsButton.Text = "Reset Attempts";
-            this.ResetAttemptsButton.Click += new System.EventHandler(this.ResetAttemptsButton_Click);
-            // 
             // AttemptsCount
             // 
             this.AttemptsCount.AutoSize = true;
@@ -280,13 +358,6 @@
             this.AttemptsCount.Size = new System.Drawing.Size(14, 15);
             this.AttemptsCount.TabIndex = 5;
             this.AttemptsCount.Text = "0";
-            // 
-            // HideAttemptsContext
-            // 
-            this.HideAttemptsContext.Name = "HideAttemptsContext";
-            this.HideAttemptsContext.Size = new System.Drawing.Size(233, 22);
-            this.HideAttemptsContext.Text = "Hide attempts text";
-            this.HideAttemptsContext.Click += new System.EventHandler(this.HideAttemptsContext_Click);
             // 
             // Bruhsplit
             // 
@@ -337,5 +408,13 @@
         private System.Windows.Forms.ToolStripMenuItem ResetAttemptsButton;
         private System.Windows.Forms.Label AttemptsCount;
         private System.Windows.Forms.ToolStripMenuItem HideAttemptsContext;
+        private System.Windows.Forms.ToolStripMenuItem ExitPopupContext;
+        private System.Windows.Forms.ToolStripMenuItem endToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem KeyTesterToolStrip;
+        private System.Windows.Forms.ToolStripMenuItem otherSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mSTextPrecisionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox MsTextPrecisionTextbox;
+        private System.Windows.Forms.ToolStripTextBox EndKeybindTextbox;
     }
 }

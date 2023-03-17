@@ -73,6 +73,7 @@ namespace bruhsplit
                     };
                     textBoxCheck(keybindSettingsToolStripMenuItem.DropDownItems,dict);
                     textBoxCheck(colorSettingsToolStripMenuItem.DropDownItems,dict);
+                    textBoxCheck(otherSettingsToolStripMenuItem.DropDownItems, dict);
                 });
             };
         }
@@ -101,17 +102,21 @@ namespace bruhsplit
             _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
 
             Load += new EventHandler(Form1_Load);
+            FormClosing += new FormClosingEventHandler(Bruhsplit_FormClosing);
 
             options.Add("LivesplitStyleFormatting", false);
             options.Add("SmallMSText", true);
             options.Add("GradientText", true);
             options.Add("HideAttempts", false);
+            options.Add("ExitPopup", true);
             options.Add("StartKeybind", "F2");
             options.Add("PauseKeybind", "F3");
+            options.Add("EndKeybind", "None");
             options.Add("RunningColor", "144, 238, 144");
             options.Add("PausedColor", "211, 211, 211");
             options.Add("CompletedColor", "0, 255, 255");
             options.Add("Attempts", "0");
+            options.Add("MsTextPrecision", "2");
             Task.Run(async () => { await loadData(); });
         }
         private string formatTime(float time) {
@@ -171,6 +176,7 @@ namespace bruhsplit
                     } else if (status == "None") {
                         status = "Running";
                         options["Attempts"] = (Int32.Parse(options["Attempts"]) + 1).ToString();
+                        Task.Run(async () => { await saveData(); });
                         startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     }
                 } else if (loggedKey.ToString().ToLower() == options["PauseKeybind"].ToLower()) {
@@ -181,12 +187,29 @@ namespace bruhsplit
                         status = "Running";
                         startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - savedTime * 1000;
                     };
-                }
+                } else if (loggedKey.ToString().ToLower() == options["EndKeybind"].ToLower()) {
+                    if (status == "Running") {
+                        status = "None";
+                    };
+                };
+                KeyTesterToolStrip.Text = "Key tester: " + loggedKey.ToString();
             }
         }
 
+        private int getMSPrecision() {
+            int precision = 2;
+            try {
+                precision = Int32.Parse(options["MsTextPrecision"]);
+            } catch { };
+            if (precision > 9) precision = 9;
+            if (precision < 0) precision = 0;
+            return precision;
+        }
+
         private string formatTimeMs(float timee) {
-            return String.Format(".{0:D2}", (int)Math.Floor((timee % 1) * 100));
+            int precision = getMSPrecision();
+            if (precision == 0) return "";
+            return String.Format(".{0:D" + precision + "}", (int)Math.Floor((timee % 1) * (Math.Pow(10,precision))));
         }
 
         private void makeCapGradientText(Label og, Label cap) {
@@ -238,7 +261,7 @@ namespace bruhsplit
                     MSTimer.Text = formatTimeMs((float)savedTime);
                 }
                 var MSTimerWidth = MSTimer.Width;
-                if (!options["SmallMSText"]) {
+                if (!options["SmallMSText"] || MSTimer.Text == "") {
                     MSTimerWidth = 5;
                     MSTimer.Text = "";
                 }
@@ -272,8 +295,38 @@ namespace bruhsplit
             Task.Run(async () => { await saveData(); });
         }
 
+        private void emulateClose(dynamic e, bool isButton) {
+            if (status != "Running" || !options["ExitPopup"]) {
+                if (isButton) Environment.Exit(0);
+                return;
+            }
+            savedTime = getTime();
+            status = "Paused";
+            const string message =
+                "Are you sure you want to close bruhsplit? You still have the timer running!";
+            const string caption = "Closing";
+            var result = MessageBox.Show(message, caption,
+                                         MessageBoxButtons.YesNo,
+                                         MessageBoxIcon.Question);
+            if (result == DialogResult.No) {
+                if (!isButton) {
+                    e.Cancel = true;
+                }
+                status = "Running";
+                startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - savedTime * 1000;
+            } else {
+                if (isButton) {
+                    Environment.Exit(0);
+                }
+            }
+        }
+
         private void testToolStripMenuItem_Click(object sender, EventArgs e) {
-            Environment.Exit(0);
+            emulateClose(true,true);
+        }
+
+        private void Bruhsplit_FormClosing(object sender, FormClosingEventArgs e) {
+            emulateClose(e,false);
         }
 
         private void LivesplitStyleFormattingContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
@@ -283,6 +336,8 @@ namespace bruhsplit
         private void PausedColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
         private void RunningColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
         private void CompletedColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
+        private void MsTextPrecisionTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
+        private void EndKeybindTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
 
         private void ResetAttemptsButton_Click(object sender, EventArgs e) {
             options["Attempts"] = "0";
@@ -290,5 +345,6 @@ namespace bruhsplit
         }
 
         private void HideAttemptsContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
+        private void ExitPopupContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
     }
 };
