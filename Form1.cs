@@ -85,6 +85,10 @@ namespace bruhsplit
             TimerText.AutoSize = true;
             TimerText.Text = "im pau";
             TimerText.Size = new Size(Width, Height);
+            TimerText.BringToFront();
+            MSTimer.BringToFront();
+            TimerText2.BringToFront();
+            MSTimer2.BringToFront();
             MSTimer.AutoSize = true;
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             //MSTimer.BackColor = Color.SaddleBrown;
@@ -101,11 +105,13 @@ namespace bruhsplit
             options.Add("LivesplitStyleFormatting", false);
             options.Add("SmallMSText", true);
             options.Add("GradientText", true);
+            options.Add("HideAttempts", false);
             options.Add("StartKeybind", "F2");
             options.Add("PauseKeybind", "F3");
             options.Add("RunningColor", "144, 238, 144");
             options.Add("PausedColor", "211, 211, 211");
             options.Add("CompletedColor", "0, 255, 255");
+            options.Add("Attempts", "0");
             Task.Run(async () => { await loadData(); });
         }
         private string formatTime(float time) {
@@ -156,7 +162,7 @@ namespace bruhsplit
                 // Now you can access both, the key and virtual code
                 Keys loggedKey = e.KeyboardData.Key;
                 int loggedVkCode = e.KeyboardData.VirtualCode;
-                if (loggedKey.ToString() == options["StartKeybind"]) {
+                if (loggedKey.ToString().ToLower() == options["StartKeybind"].ToLower()) {
                     if (status == "Running") {
                         status = "Ended";
                         savedTime = getTime();
@@ -164,9 +170,10 @@ namespace bruhsplit
                         status = "None";
                     } else if (status == "None") {
                         status = "Running";
+                        options["Attempts"] = (Int32.Parse(options["Attempts"]) + 1).ToString();
                         startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     }
-                } else if (loggedKey.ToString() == options["PauseKeybind"]) {
+                } else if (loggedKey.ToString().ToLower() == options["PauseKeybind"].ToLower()) {
                     if (status == "Running") {
                         status = "Paused";
                         savedTime = getTime();
@@ -240,6 +247,8 @@ namespace bruhsplit
                 TimerText.Location = new Point(Width - TimerText.Width - MSTimerWidth + 8, (50 - 48) / 2);
                 makeCapGradientText(TimerText, TimerText2);
                 makeCapGradientText(MSTimer, MSTimer2);
+                AttemptsCount.Text = options["Attempts"];
+                AttemptsCount.Visible = !options["HideAttempts"];
             }));
         }
         private void Form1_Load(object sender, EventArgs e) {
@@ -274,5 +283,12 @@ namespace bruhsplit
         private void PausedColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
         private void RunningColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
         private void CompletedColorTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
+
+        private void ResetAttemptsButton_Click(object sender, EventArgs e) {
+            options["Attempts"] = "0";
+            Task.Run(async () => { await saveData(); });
+        }
+
+        private void HideAttemptsContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
     }
 };

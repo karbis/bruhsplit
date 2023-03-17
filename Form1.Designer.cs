@@ -49,6 +49,10 @@
             this.MSTimer = new System.Windows.Forms.Label();
             this.TimerText2 = new System.Windows.Forms.Label();
             this.MSTimer2 = new System.Windows.Forms.Label();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ResetAttemptsButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.AttemptsCount = new System.Windows.Forms.Label();
+            this.HideAttemptsContext = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,9 +72,11 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.QuitStrip,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.ResetAttemptsButton});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 98);
             // 
             // QuitStrip
             // 
@@ -85,6 +91,7 @@
             this.LivesplitStyleFormattingContext,
             this.SmallMSTextContext,
             this.GradientTextContext,
+            this.HideAttemptsContext,
             this.toolStripSeparator1,
             this.keybindSettingsToolStripMenuItem,
             this.colorSettingsToolStripMenuItem});
@@ -136,7 +143,7 @@
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.startToolStripMenuItem.Text = "[Start/End]";
             // 
             // StartKeybindTextbox
@@ -150,7 +157,7 @@
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.pauseToolStripMenuItem.Text = "[Pause]";
             // 
             // PauseKeybindTextbox
@@ -176,7 +183,7 @@
             // nothingToolStripMenuItem
             // 
             this.nothingToolStripMenuItem.Name = "nothingToolStripMenuItem";
-            this.nothingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nothingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.nothingToolStripMenuItem.Text = "[Paused/Nothing]";
             // 
             // PausedColorTextbox
@@ -190,7 +197,7 @@
             // runningToolStripMenuItem
             // 
             this.runningToolStripMenuItem.Name = "runningToolStripMenuItem";
-            this.runningToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runningToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.runningToolStripMenuItem.Text = "[Running]";
             // 
             // RunningColorTextbox
@@ -204,7 +211,7 @@
             // completedToolStripMenuItem
             // 
             this.completedToolStripMenuItem.Name = "completedToolStripMenuItem";
-            this.completedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.completedToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.completedToolStripMenuItem.Text = "[Completed]";
             // 
             // CompletedColorTextbox
@@ -251,6 +258,36 @@
             this.MSTimer2.TabIndex = 4;
             this.MSTimer2.Text = "label1";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // ResetAttemptsButton
+            // 
+            this.ResetAttemptsButton.Name = "ResetAttemptsButton";
+            this.ResetAttemptsButton.Size = new System.Drawing.Size(180, 22);
+            this.ResetAttemptsButton.Text = "Reset Attempts";
+            this.ResetAttemptsButton.Click += new System.EventHandler(this.ResetAttemptsButton_Click);
+            // 
+            // AttemptsCount
+            // 
+            this.AttemptsCount.AutoSize = true;
+            this.AttemptsCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.AttemptsCount.ForeColor = System.Drawing.Color.White;
+            this.AttemptsCount.Location = new System.Drawing.Point(2, 1);
+            this.AttemptsCount.Name = "AttemptsCount";
+            this.AttemptsCount.Size = new System.Drawing.Size(14, 15);
+            this.AttemptsCount.TabIndex = 5;
+            this.AttemptsCount.Text = "0";
+            // 
+            // HideAttemptsContext
+            // 
+            this.HideAttemptsContext.Name = "HideAttemptsContext";
+            this.HideAttemptsContext.Size = new System.Drawing.Size(233, 22);
+            this.HideAttemptsContext.Text = "Hide attempts text";
+            this.HideAttemptsContext.Click += new System.EventHandler(this.HideAttemptsContext_Click);
+            // 
             // Bruhsplit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -258,6 +295,7 @@
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(250, 50);
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.AttemptsCount);
             this.Controls.Add(this.MSTimer2);
             this.Controls.Add(this.TimerText2);
             this.Controls.Add(this.MSTimer);
@@ -295,5 +333,9 @@
         private System.Windows.Forms.ToolStripTextBox RunningColorTextbox;
         private System.Windows.Forms.ToolStripMenuItem completedToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox CompletedColorTextbox;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem ResetAttemptsButton;
+        private System.Windows.Forms.Label AttemptsCount;
+        private System.Windows.Forms.ToolStripMenuItem HideAttemptsContext;
     }
 }
