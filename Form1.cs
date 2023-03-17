@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Timers;
 using System.IO;
-using System.Drawing.Drawing2D;
+using Microsoft.Win32;
 
 namespace bruhsplit
 {
@@ -21,6 +21,11 @@ namespace bruhsplit
         private string status = "None";
         private double startTime = 0;
         private double savedTime = 0;
+        private dynamic selectedGame = null;
+        private double pb = -1;
+        private double oldPb = -1;
+        private int attempts = 0;
+        private bool shouldSave = false;
         IDictionary<string, dynamic> options = new Dictionary<string, dynamic>();
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
@@ -115,11 +120,10 @@ namespace bruhsplit
             options.Add("RunningColor", "144, 238, 144");
             options.Add("PausedColor", "211, 211, 211");
             options.Add("CompletedColor", "0, 255, 255");
-            options.Add("Attempts", "0");
             options.Add("MsTextPrecision", "2");
             Task.Run(async () => { await loadData(); });
         }
-        private string formatTime(float time) {
+        private string formatTime(float time, bool ignoreMSCheck) {
             int min = (int)Math.Floor((time / 60) % 60);
             int sec = (int)Math.Floor(time % 60);
             int ms = (int)Math.Floor((time % 1) * 100);
@@ -134,7 +138,7 @@ namespace bruhsplit
             if (options["LivesplitStyleFormatting"] && min == 0 && hour == 0) {
                 finalStr = String.Format("{0}.{1:D2}", sec, ms);
             }
-            if (options["SmallMSText"]) {
+            if (options["SmallMSText"] && !ignoreMSCheck) {
                 finalStr = finalStr.Substring(0, finalStr.Length - 3);
             }
             return finalStr;
@@ -171,12 +175,14 @@ namespace bruhsplit
                     if (status == "Running") {
                         status = "Ended";
                         savedTime = getTime();
+                        if (pb > savedTime || pb == -1) { pb = savedTime; shouldSave = true; };
                     } else if (status == "Ended") {
                         status = "None";
+                        oldPb = pb;
                     } else if (status == "None") {
                         status = "Running";
-                        options["Attempts"] = (Int32.Parse(options["Attempts"]) + 1).ToString();
-                        Task.Run(async () => { await saveData(); });
+                        attempts++;
+                        shouldSave = true;
                         startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     }
                 } else if (loggedKey.ToString().ToLower() == options["PauseKeybind"].ToLower()) {
@@ -190,6 +196,7 @@ namespace bruhsplit
                 } else if (loggedKey.ToString().ToLower() == options["EndKeybind"].ToLower()) {
                     if (status == "Running") {
                         status = "None";
+                        if (pb > getTime() || pb == -1) { oldPb = pb; pb = getTime(); shouldSave = true; };
                     };
                 };
                 KeyTesterToolStrip.Text = "Key tester: " + loggedKey.ToString();
@@ -243,21 +250,21 @@ namespace bruhsplit
         private void UpdateFrame(object sender, ElapsedEventArgs e) {
             Invoke(new Action(() => {
                 if (status == "None") {
-                    TimerText.Text = formatTime(0);
+                    TimerText.Text = formatTime(0, false);
                     MSTimer.Text = formatTimeMs(0);
                     TimerText.ForeColor = stringToColor(options["PausedColor"]);
                 } else if (status == "Running") {
                     var curTime = (float)getTime();
-                    TimerText.Text = formatTime(curTime);
+                    TimerText.Text = formatTime(curTime,false);
                     MSTimer.Text = formatTimeMs(curTime);
                     TimerText.ForeColor = stringToColor(options["RunningColor"]);
                 } else if (status == "Ended") {
-                    TimerText.Text = formatTime((float)savedTime);
+                    TimerText.Text = formatTime((float)savedTime,false);
                     MSTimer.Text = formatTimeMs((float)savedTime);
                     TimerText.ForeColor = stringToColor(options["CompletedColor"]);
                 } else if (status == "Paused") {
                     TimerText.ForeColor = stringToColor(options["PausedColor"]);
-                    TimerText.Text = formatTime((float)savedTime);
+                    TimerText.Text = formatTime((float)savedTime,false);
                     MSTimer.Text = formatTimeMs((float)savedTime);
                 }
                 var MSTimerWidth = MSTimer.Width;
@@ -270,8 +277,34 @@ namespace bruhsplit
                 TimerText.Location = new Point(Width - TimerText.Width - MSTimerWidth + 8, (50 - 48) / 2);
                 makeCapGradientText(TimerText, TimerText2);
                 makeCapGradientText(MSTimer, MSTimer2);
-                AttemptsCount.Text = options["Attempts"];
+                AttemptsCount.Text = attempts.ToString();
                 AttemptsCount.Visible = !options["HideAttempts"];
+                if (selectedGame != null) {
+                    TimeComparison.Text = formatTime((float)pb, true);
+                    TimeComparisonColored.Location = new Point(TimeComparison.Width, TimeComparison.Location.Y);
+                    var coloredText = "";
+                    var coloredColor = Color.White;
+                    double timeAwayFromPb = (double)(getTime() - pb);
+                    if (status == "Paused" || status == "Ended") timeAwayFromPb = (double)(savedTime - pb);
+                    if ((timeAwayFromPb > -5 || status == "Ended") && startTime != 0 && status != "None") {
+                        if (status == "Ended" && oldPb != -1) {
+                            timeAwayFromPb = pb-oldPb;
+                        }
+                        if (timeAwayFromPb > 0) {
+                            coloredColor = Color.Red;
+                            coloredText = "+" + formatTime((float)timeAwayFromPb, true);
+                        } else if (timeAwayFromPb <= 0) {
+                            coloredColor = Color.LightGreen;
+                            coloredText = "-" + formatTime((float)Math.Abs(timeAwayFromPb), true);
+                        }
+                    }
+                    if (timeAwayFromPb == 0 || pb == -1) { coloredText = ""; };
+                    TimeComparisonColored.ForeColor = coloredColor;
+                    TimeComparisonColored.Text = coloredText;
+                    if (pb == -1) {
+                        TimeComparison.Text = "";
+                    };
+                }
             }));
         }
         private void Form1_Load(object sender, EventArgs e) {
@@ -296,6 +329,38 @@ namespace bruhsplit
         }
 
         private void emulateClose(dynamic e, bool isButton) {
+            if (shouldSave && selectedGame != null) {
+                if (status == "Running")  {
+                    savedTime = getTime();
+                    status = "Paused";
+                };
+                const string message2 =
+                    "Save unsaved Game progress?";
+                const string caption2 = "Save";
+                var result2 = MessageBox.Show(message2, caption2,
+                                             MessageBoxButtons.YesNoCancel,
+                                             MessageBoxIcon.Question);
+                if (result2 == DialogResult.Yes) {
+                    if (pb > savedTime || pb == -1) pb = savedTime;
+                    saveClick();
+                    if (isButton) {
+                        Environment.Exit(0);
+                    };
+                } else if (result2 == DialogResult.Cancel) {
+                    if (!isButton) {
+                        e.Cancel = true;
+                    }
+                    if (status == "Paused") {
+                        status = "Running";
+                        startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - savedTime * 1000;
+                    }
+                } else if (result2 == DialogResult.No) {
+                    if (isButton) {
+                        Environment.Exit(0);
+                    }
+                };
+                return;
+            };
             if (status != "Running" || !options["ExitPopup"]) {
                 if (isButton) Environment.Exit(0);
                 return;
@@ -340,11 +405,77 @@ namespace bruhsplit
         private void EndKeybindTextbox_LostFocus(object sender, EventArgs e) { optionHandlerText((ToolStripTextBox)sender); }
 
         private void ResetAttemptsButton_Click(object sender, EventArgs e) {
-            options["Attempts"] = "0";
-            Task.Run(async () => { await saveData(); });
+            attempts = 0;
+            shouldSave = true;
         }
 
         private void HideAttemptsContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
         private void ExitPopupContext_Click(object sender, EventArgs e) { optionHandler((ToolStripMenuItem)sender); }
+
+        private void loadGameToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Bruhsplit Game files|*.bsg|All files|*.*";
+
+            // Show save file dialog box
+            DialogResult result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == DialogResult.OK) {
+                // Save document
+                using (TextReader textreader = File.OpenText(dlg.FileName)) {
+                    string txt = textreader.ReadLine();
+                    if (txt.Split(';').Length != 2 || txt.Split('=').Length != 3) return;
+                    pb = double.Parse(txt.Split(';')[0].Split('=')[1]);
+                    attempts = int.Parse(txt.Split(';')[1].Split('=')[1]);
+                    selectedGame = Path.GetFullPath(dlg.FileName);
+                    var fileName = Path.GetFileName(selectedGame);
+                    GameSelectedText.Text = "Game selected: " + fileName.Substring(0,fileName.Length-4);
+                }
+            }
+        }
+
+        private void saveClick() {
+            if (selectedGame != null) {
+#pragma warning disable CS1998
+                Task.Run(async () => {
+#pragma warning restore CS1998
+                    TextWriter tw = new StreamWriter(selectedGame);
+                    tw.WriteLine("PB=" + pb.ToString() + ";Attempts=" + attempts.ToString());
+                    tw.Close();
+                    shouldSave = false;
+                });
+                return;
+            }
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.FileName = "Game";
+            dlg.DefaultExt = ".bsg";
+            dlg.Filter = "Bruhsplit Game files|*.bsg|All files|*.*";
+
+            // Show save file dialog box
+            DialogResult result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == DialogResult.OK) {
+                // Save document
+                TextWriter tw = new StreamWriter(dlg.FileName);
+                tw.WriteLine("PB=" + pb.ToString() + ";Attempts=" + attempts.ToString());
+                tw.Close();
+                shouldSave = false;
+                selectedGame = Path.GetFullPath(dlg.FileName);
+            }
+        }
+
+        private void saveGameToolStripMenuItem_Click(object sender, EventArgs e) {
+            saveClick();
+        }
+
+        private void Bruhsplit_Load(object sender, EventArgs e) {
+
+        }
+
+        private void resetPBToolStripMenuItem_Click(object sender, EventArgs e) {
+            pb = -1;
+            shouldSave = true;
+        }
     }
 };

@@ -55,12 +55,20 @@
             this.otherSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mSTextPrecisionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MsTextPrecisionTextbox = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ResetAttemptsButton = new System.Windows.Forms.ToolStripMenuItem();
             this.MSTimer = new System.Windows.Forms.Label();
             this.TimerText2 = new System.Windows.Forms.Label();
             this.MSTimer2 = new System.Windows.Forms.Label();
             this.AttemptsCount = new System.Windows.Forms.Label();
+            this.TimeComparison = new System.Windows.Forms.Label();
+            this.loadGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.GameSelectedText = new System.Windows.Forms.ToolStripMenuItem();
+            this.TimeComparisonColored = new System.Windows.Forms.Label();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.resetPBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,15 +89,19 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.QuitStrip,
             this.optionsToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.ResetAttemptsButton});
+            this.toolStripSeparator4,
+            this.loadGameToolStripMenuItem,
+            this.saveGameToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.ResetAttemptsButton,
+            this.resetPBToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 170);
             // 
             // QuitStrip
             // 
             this.QuitStrip.Name = "QuitStrip";
-            this.QuitStrip.Size = new System.Drawing.Size(180, 22);
+            this.QuitStrip.Size = new System.Drawing.Size(154, 22);
             this.QuitStrip.Text = "Quit";
             this.QuitStrip.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
@@ -104,9 +116,11 @@
             this.toolStripSeparator1,
             this.keybindSettingsToolStripMenuItem,
             this.colorSettingsToolStripMenuItem,
-            this.otherSettingsToolStripMenuItem});
+            this.otherSettingsToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.GameSelectedText});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // LivesplitStyleFormattingContext
@@ -300,15 +314,10 @@
             this.MsTextPrecisionTextbox.Text = "2";
             this.MsTextPrecisionTextbox.LostFocus += new System.EventHandler(this.MsTextPrecisionTextbox_LostFocus);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-            // 
             // ResetAttemptsButton
             // 
             this.ResetAttemptsButton.Name = "ResetAttemptsButton";
-            this.ResetAttemptsButton.Size = new System.Drawing.Size(180, 22);
+            this.ResetAttemptsButton.Size = new System.Drawing.Size(154, 22);
             this.ResetAttemptsButton.Text = "Reset Attempts";
             this.ResetAttemptsButton.Click += new System.EventHandler(this.ResetAttemptsButton_Click);
             // 
@@ -359,6 +368,68 @@
             this.AttemptsCount.TabIndex = 5;
             this.AttemptsCount.Text = "0";
             // 
+            // TimeComparison
+            // 
+            this.TimeComparison.AutoSize = true;
+            this.TimeComparison.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.TimeComparison.ForeColor = System.Drawing.Color.White;
+            this.TimeComparison.Location = new System.Drawing.Point(2, 32);
+            this.TimeComparison.Name = "TimeComparison";
+            this.TimeComparison.Size = new System.Drawing.Size(0, 15);
+            this.TimeComparison.TabIndex = 6;
+            // 
+            // loadGameToolStripMenuItem
+            // 
+            this.loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
+            this.loadGameToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.loadGameToolStripMenuItem.Text = "Load Game";
+            this.loadGameToolStripMenuItem.Click += new System.EventHandler(this.loadGameToolStripMenuItem_Click);
+            // 
+            // saveGameToolStripMenuItem
+            // 
+            this.saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
+            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.saveGameToolStripMenuItem.Text = "Save Game";
+            this.saveGameToolStripMenuItem.Click += new System.EventHandler(this.saveGameToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(151, 6);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(230, 6);
+            // 
+            // GameSelectedText
+            // 
+            this.GameSelectedText.Name = "GameSelectedText";
+            this.GameSelectedText.Size = new System.Drawing.Size(233, 22);
+            this.GameSelectedText.Text = "Game selected: None";
+            // 
+            // TimeComparisonColored
+            // 
+            this.TimeComparisonColored.AutoSize = true;
+            this.TimeComparisonColored.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.TimeComparisonColored.ForeColor = System.Drawing.Color.White;
+            this.TimeComparisonColored.Location = new System.Drawing.Point(125, 18);
+            this.TimeComparisonColored.Name = "TimeComparisonColored";
+            this.TimeComparisonColored.Size = new System.Drawing.Size(0, 15);
+            this.TimeComparisonColored.TabIndex = 7;
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
+            // 
+            // resetPBToolStripMenuItem
+            // 
+            this.resetPBToolStripMenuItem.Name = "resetPBToolStripMenuItem";
+            this.resetPBToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetPBToolStripMenuItem.Text = "Reset PB";
+            this.resetPBToolStripMenuItem.Click += new System.EventHandler(this.resetPBToolStripMenuItem_Click);
+            // 
             // Bruhsplit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -366,6 +437,8 @@
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(250, 50);
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.TimeComparisonColored);
+            this.Controls.Add(this.TimeComparison);
             this.Controls.Add(this.AttemptsCount);
             this.Controls.Add(this.MSTimer2);
             this.Controls.Add(this.TimerText2);
@@ -374,6 +447,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Bruhsplit";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Bruhsplit_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -404,7 +478,6 @@
         private System.Windows.Forms.ToolStripTextBox RunningColorTextbox;
         private System.Windows.Forms.ToolStripMenuItem completedToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox CompletedColorTextbox;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem ResetAttemptsButton;
         private System.Windows.Forms.Label AttemptsCount;
         private System.Windows.Forms.ToolStripMenuItem HideAttemptsContext;
@@ -416,5 +489,14 @@
         private System.Windows.Forms.ToolStripMenuItem mSTextPrecisionToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox MsTextPrecisionTextbox;
         private System.Windows.Forms.ToolStripTextBox EndKeybindTextbox;
+        private System.Windows.Forms.Label TimeComparison;
+        private System.Windows.Forms.ToolStripMenuItem loadGameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveGameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem GameSelectedText;
+        private System.Windows.Forms.Label TimeComparisonColored;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem resetPBToolStripMenuItem;
     }
 }
