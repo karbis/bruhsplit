@@ -279,7 +279,7 @@ namespace bruhsplit
                 AttemptsCount.Text = attempts.ToString();
                 AttemptsCount.Visible = !options["HideAttempts"] && attempts != 0;
                 if (attempts == 1 && status == "Running") AttemptsCount.Visible = false;
-                if (shouldSave) { saveGameToolStripMenuItem.Text = "*Save Game"; } else { saveGameToolStripMenuItem.Text = "Save Game"; };
+                if (shouldSave && selectedGame != null) { saveGameToolStripMenuItem.Text = "*Save Game"; } else { saveGameToolStripMenuItem.Text = "Save Game"; };
                 if (selectedGame != null) {
                     TimeComparison.Text = formatTime((float)pb, true);
                     TimeComparisonColored.Location = new Point(TimeComparison.Width, TimeComparison.Location.Y);
