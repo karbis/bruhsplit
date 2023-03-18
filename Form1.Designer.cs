@@ -43,8 +43,6 @@
             this.PauseKeybindTextbox = new System.Windows.Forms.ToolStripTextBox();
             this.endToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EndKeybindTextbox = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.KeyTesterToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.colorSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nothingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PausedColorTextbox = new System.Windows.Forms.ToolStripTextBox();
@@ -55,20 +53,20 @@
             this.otherSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mSTextPrecisionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MsTextPrecisionTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.GameSelectedText = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.loadGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.ResetAttemptsButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetPBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MSTimer = new System.Windows.Forms.Label();
             this.TimerText2 = new System.Windows.Forms.Label();
             this.MSTimer2 = new System.Windows.Forms.Label();
             this.AttemptsCount = new System.Windows.Forms.Label();
             this.TimeComparison = new System.Windows.Forms.Label();
-            this.loadGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.GameSelectedText = new System.Windows.Forms.ToolStripMenuItem();
             this.TimeComparisonColored = new System.Windows.Forms.Label();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.resetPBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,7 +94,7 @@
             this.ResetAttemptsButton,
             this.resetPBToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 170);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(155, 148);
             // 
             // QuitStrip
             // 
@@ -177,9 +175,7 @@
             this.pauseToolStripMenuItem,
             this.PauseKeybindTextbox,
             this.endToolStripMenuItem,
-            this.EndKeybindTextbox,
-            this.toolStripSeparator3,
-            this.KeyTesterToolStrip});
+            this.EndKeybindTextbox});
             this.keybindSettingsToolStripMenuItem.Name = "keybindSettingsToolStripMenuItem";
             this.keybindSettingsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.keybindSettingsToolStripMenuItem.Text = "Keybind settings";
@@ -224,17 +220,6 @@
             this.EndKeybindTextbox.Size = new System.Drawing.Size(100, 23);
             this.EndKeybindTextbox.Text = "None";
             this.EndKeybindTextbox.LostFocus += new System.EventHandler(this.EndKeybindTextbox_LostFocus);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
-            // 
-            // KeyTesterToolStrip
-            // 
-            this.KeyTesterToolStrip.Name = "KeyTesterToolStrip";
-            this.KeyTesterToolStrip.Size = new System.Drawing.Size(180, 22);
-            this.KeyTesterToolStrip.Text = "Key tester: None";
             // 
             // colorSettingsToolStripMenuItem
             // 
@@ -303,7 +288,7 @@
             // mSTextPrecisionToolStripMenuItem
             // 
             this.mSTextPrecisionToolStripMenuItem.Name = "mSTextPrecisionToolStripMenuItem";
-            this.mSTextPrecisionToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.mSTextPrecisionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mSTextPrecisionToolStripMenuItem.Text = "[MS Text Precision]";
             // 
             // MsTextPrecisionTextbox
@@ -314,12 +299,54 @@
             this.MsTextPrecisionTextbox.Text = "2";
             this.MsTextPrecisionTextbox.LostFocus += new System.EventHandler(this.MsTextPrecisionTextbox_LostFocus);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(230, 6);
+            // 
+            // GameSelectedText
+            // 
+            this.GameSelectedText.Name = "GameSelectedText";
+            this.GameSelectedText.Size = new System.Drawing.Size(233, 22);
+            this.GameSelectedText.Text = "Game selected: None";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(151, 6);
+            // 
+            // loadGameToolStripMenuItem
+            // 
+            this.loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
+            this.loadGameToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.loadGameToolStripMenuItem.Text = "Load Game";
+            this.loadGameToolStripMenuItem.Click += new System.EventHandler(this.loadGameToolStripMenuItem_Click);
+            // 
+            // saveGameToolStripMenuItem
+            // 
+            this.saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
+            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.saveGameToolStripMenuItem.Text = "Save Game";
+            this.saveGameToolStripMenuItem.Click += new System.EventHandler(this.saveGameToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(151, 6);
+            // 
             // ResetAttemptsButton
             // 
             this.ResetAttemptsButton.Name = "ResetAttemptsButton";
             this.ResetAttemptsButton.Size = new System.Drawing.Size(154, 22);
             this.ResetAttemptsButton.Text = "Reset Attempts";
             this.ResetAttemptsButton.Click += new System.EventHandler(this.ResetAttemptsButton_Click);
+            // 
+            // resetPBToolStripMenuItem
+            // 
+            this.resetPBToolStripMenuItem.Name = "resetPBToolStripMenuItem";
+            this.resetPBToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.resetPBToolStripMenuItem.Text = "Reset PB";
+            this.resetPBToolStripMenuItem.Click += new System.EventHandler(this.resetPBToolStripMenuItem_Click);
             // 
             // MSTimer
             // 
@@ -378,36 +405,6 @@
             this.TimeComparison.Size = new System.Drawing.Size(0, 15);
             this.TimeComparison.TabIndex = 6;
             // 
-            // loadGameToolStripMenuItem
-            // 
-            this.loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
-            this.loadGameToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.loadGameToolStripMenuItem.Text = "Load Game";
-            this.loadGameToolStripMenuItem.Click += new System.EventHandler(this.loadGameToolStripMenuItem_Click);
-            // 
-            // saveGameToolStripMenuItem
-            // 
-            this.saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
-            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.saveGameToolStripMenuItem.Text = "Save Game";
-            this.saveGameToolStripMenuItem.Click += new System.EventHandler(this.saveGameToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(151, 6);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(230, 6);
-            // 
-            // GameSelectedText
-            // 
-            this.GameSelectedText.Name = "GameSelectedText";
-            this.GameSelectedText.Size = new System.Drawing.Size(233, 22);
-            this.GameSelectedText.Text = "Game selected: None";
-            // 
             // TimeComparisonColored
             // 
             this.TimeComparisonColored.AutoSize = true;
@@ -417,18 +414,6 @@
             this.TimeComparisonColored.Name = "TimeComparisonColored";
             this.TimeComparisonColored.Size = new System.Drawing.Size(0, 15);
             this.TimeComparisonColored.TabIndex = 7;
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
-            // 
-            // resetPBToolStripMenuItem
-            // 
-            this.resetPBToolStripMenuItem.Name = "resetPBToolStripMenuItem";
-            this.resetPBToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.resetPBToolStripMenuItem.Text = "Reset PB";
-            this.resetPBToolStripMenuItem.Click += new System.EventHandler(this.resetPBToolStripMenuItem_Click);
             // 
             // Bruhsplit
             // 
@@ -483,8 +468,6 @@
         private System.Windows.Forms.ToolStripMenuItem HideAttemptsContext;
         private System.Windows.Forms.ToolStripMenuItem ExitPopupContext;
         private System.Windows.Forms.ToolStripMenuItem endToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem KeyTesterToolStrip;
         private System.Windows.Forms.ToolStripMenuItem otherSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mSTextPrecisionToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox MsTextPrecisionTextbox;

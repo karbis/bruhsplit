@@ -198,7 +198,6 @@ namespace bruhsplit
                         status = "None";
                     };
                 };
-                KeyTesterToolStrip.Text = "Key tester: " + loggedKey.ToString();
             }
         }
 
