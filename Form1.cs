@@ -196,7 +196,6 @@ namespace bruhsplit
                 } else if (loggedKey.ToString().ToLower() == options["EndKeybind"].ToLower()) {
                     if (status == "Running") {
                         status = "None";
-                        if (pb > getTime() || pb == -1) { oldPb = pb; pb = getTime(); shouldSave = true; };
                     };
                 };
                 KeyTesterToolStrip.Text = "Key tester: " + loggedKey.ToString();
@@ -278,7 +277,9 @@ namespace bruhsplit
                 makeCapGradientText(TimerText, TimerText2);
                 makeCapGradientText(MSTimer, MSTimer2);
                 AttemptsCount.Text = attempts.ToString();
-                AttemptsCount.Visible = !options["HideAttempts"];
+                AttemptsCount.Visible = !options["HideAttempts"] && attempts != 0;
+                if (attempts == 1 && status == "Running") AttemptsCount.Visible = false;
+                if (shouldSave) { saveGameToolStripMenuItem.Text = "*Save Game"; } else { saveGameToolStripMenuItem.Text = "Save Game"; };
                 if (selectedGame != null) {
                     TimeComparison.Text = formatTime((float)pb, true);
                     TimeComparisonColored.Location = new Point(TimeComparison.Width, TimeComparison.Location.Y);
@@ -286,11 +287,14 @@ namespace bruhsplit
                     var coloredColor = Color.White;
                     double timeAwayFromPb = (double)(getTime() - pb);
                     if (status == "Paused" || status == "Ended") timeAwayFromPb = (double)(savedTime - pb);
-                    if ((timeAwayFromPb > -5 || status == "Ended") && startTime != 0 && status != "None") {
+                    if ((timeAwayFromPb > -10 || status == "Ended") && startTime != 0 && status != "None") {
                         if (status == "Ended" && oldPb != -1) {
-                            timeAwayFromPb = pb-oldPb;
+                            timeAwayFromPb = savedTime-oldPb;
                         }
-                        if (timeAwayFromPb > 0) {
+                        if (timeAwayFromPb < -5) {
+                            coloredColor = Color.Yellow;
+                            coloredText = "-" + formatTime((float)Math.Abs(timeAwayFromPb), true);
+                        } else if (timeAwayFromPb > 0) {
                             coloredColor = Color.Red;
                             coloredText = "+" + formatTime((float)timeAwayFromPb, true);
                         } else if (timeAwayFromPb <= 0) {
@@ -342,9 +346,9 @@ namespace bruhsplit
                                              MessageBoxIcon.Question);
                 if (result2 == DialogResult.Yes) {
                     if (pb > savedTime || pb == -1) pb = savedTime;
-                    saveClick();
-                    if (isButton) {
-                        Environment.Exit(0);
+                    saveClick(true);
+                    if (!isButton) {
+                        e.Cancel = true;
                     };
                 } else if (result2 == DialogResult.Cancel) {
                     if (!isButton) {
@@ -426,6 +430,7 @@ namespace bruhsplit
                     string txt = textreader.ReadLine();
                     if (txt.Split(';').Length != 2 || txt.Split('=').Length != 3) return;
                     pb = double.Parse(txt.Split(';')[0].Split('=')[1]);
+                    oldPb = pb;
                     attempts = int.Parse(txt.Split(';')[1].Split('=')[1]);
                     selectedGame = Path.GetFullPath(dlg.FileName);
                     var fileName = Path.GetFileName(selectedGame);
@@ -434,7 +439,7 @@ namespace bruhsplit
             }
         }
 
-        private void saveClick() {
+        private void saveClick(bool quitOnDone = false) {
             if (selectedGame != null) {
 #pragma warning disable CS1998
                 Task.Run(async () => {
@@ -442,6 +447,7 @@ namespace bruhsplit
                     TextWriter tw = new StreamWriter(selectedGame);
                     tw.WriteLine("PB=" + pb.ToString() + ";Attempts=" + attempts.ToString());
                     tw.Close();
+                    if (quitOnDone) Environment.Exit(0);
                     shouldSave = false;
                 });
                 return;
